@@ -5,7 +5,7 @@
     <body>
         <h1>Bean</h1>
         <img src="cat.jpg">
-        <img src="cat.jpg">
+        <img src="dog.jpg">
         <br>
         <a href="https://th.wikipedia.org/wiki/%E0%B9%81%E0%B8%A1%E0%B8%A7">This is a Link</a>
 
