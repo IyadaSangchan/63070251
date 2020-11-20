@@ -1,42 +1,62 @@
+<html>
+<head>
+<style>
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+<title>ITF Lab</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Hello</title>
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+</head>
+<body>
 <?php
 $conn = mysqli_init();
-mysqli_real_connect($conn, 'labdataa.mysql.database.azure.com', 'iyada@labdataa', 'daoyak171044', 'itflab', 3306);
+mysqli_real_connect($conn, 'itf63.mysql.database.azure.com', 'kopsira@itf63', 'GQFvju56', 'itflab', 3306);
 if (mysqli_connect_errno($conn))
 {
     die('Failed to connect to MySQL: '.mysqli_connect_error());
 }
-$ID = $_GET['ID'];
-$row = mysqli_query($conn ,"Select * From guestbook where ID = $ID");
-$result = mysqli_fetch_assoc($row);
-
-if(isset($_POST['submit'])){
- $ID = $_GET['ID'];
- $Name=$_POST['name'];
- $Comment=$_POST['comment'];
- $Link=$_POST['link'];
- 
- $sql = "UPDATE guestbook SET Name='$Name', Comment='$Comment', Link='$Link' WHERE ID='$ID'";
- 
- if(mysqli_query($conn, $sql)){
-  header("location:show.php");
- }
-}
-
+$res = mysqli_query($conn, 'SELECT * FROM guestbook');
 ?>
-<!DOCTYPE html>
-<html>
-<head>
- <title>Comment Form</title>
-</head>
-<body>
-  <form action = "" method = "post" id="CommentForm" >
-    Name:<br>
-    <input type="text" name = "name" id="idName" value="<?=$result['Name']; ?>"> <br>
-    Comment:<br>
-    <textarea rows="10" cols="20" name = "comment" id="idComment"><?php echo $result['Comment']; ?></textarea><br>  
-    Link:<br>
-    <input type="text" name = "link" id="idLink" value="<?=$result['Link']; ?>"> <br><br>
-    <input type="submit" name="submit" id="commentBtn">
-  </form> 
+<table width="600" border="1">
+  <tr>
+    <th width="100"> <div align="center">Name</div></th>
+    <th width="350"> <div align="center">Comment </div></th>
+    <th width="150"> <div align="center">Link </div></th>
+    <th width="150"> <div align="center">Delete </div></th>
+    <th width="150"> <div align="center">Edit </div></th>
+  </tr>
+<?php
+while($Result = mysqli_fetch_array($res))
+{
+?>
+  <tr>
+    <td><?php echo $Result['Name'];?></div></td>
+    <td><?php echo $Result['Comment'];?></td>
+    <td><?php echo $Result['Link'];?></td>
+    <td><a href="delete.php?ID=<?= $Result["ID"]; ?>" class="button">Delete</a></td>
+    <td><a href="edit.php?ID=<?= $Result["ID"]; ?>" class="button">Edit</a></td>
+  </tr>
+<?php
+}
+?>
+</table>
+<?php
+mysqli_close($conn);
+?>
+<a href="form.html" class="btn btn-primary">เพิ่ม</a>
 </body>
 </html>
