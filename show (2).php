@@ -1,38 +1,42 @@
-<html>
-<head>
-<title>ITF Lab</title>
-</head>
-<body>
 <?php
 $conn = mysqli_init();
-mysqli_real_connect($conn, 'labdataa.mysql.database.azure.com', 'iyada@labdataa', 'Daoyak171044', 'ITFLab', 3306);
+mysqli_real_connect($conn, 'labdataa.mysql.database.azure.com', 'iyada@labdataa', '', 'itflab', 3306);
 if (mysqli_connect_errno($conn))
 {
     die('Failed to connect to MySQL: '.mysqli_connect_error());
 }
-$res = mysqli_query($conn, 'SELECT * FROM guestbook');
-?>
-<table width="600" border="1">
-  <tr>
-    <th width="100"> <div align="center">Name</div></th>
-    <th width="350"> <div align="center">Comment </div></th>
-    <th width="150"> <div align="center">Link </div></th>
-  </tr>
-<?php
-while($Result = mysqli_fetch_array($res))
-{
-?>
-  <tr>
-    <td><?php echo $Result['Name'];?></div></td>
-    <td><?php echo $Result['Comment'];?></td>
-    <td><?php echo $Result['Link'];?></td>
-  </tr>
-<?php
+$ID = $_GET['ID'];
+$row = mysqli_query($conn ,"Select * From guestbook where ID = $ID");
+$result = mysqli_fetch_assoc($row);
+
+if(isset($_POST['submit'])){
+ $ID = $_GET['ID'];
+ $Name=$_POST['name'];
+ $Comment=$_POST['comment'];
+ $Link=$_POST['link'];
+ 
+ $sql = "UPDATE guestbook SET Name='$Name', Comment='$Comment', Link='$Link' WHERE ID='$ID'";
+ 
+ if(mysqli_query($conn, $sql)){
+  header("location:show.php");
+ }
 }
+
 ?>
-</table>
-<?php
-mysqli_close($conn);
-?>
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Comment Form</title>
+</head>
+<body>
+  <form action = "" method = "post" id="CommentForm" >
+    Name:<br>
+    <input type="text" name = "name" id="idName" value="<?=$result['Name']; ?>"> <br>
+    Comment:<br>
+    <textarea rows="10" cols="20" name = "comment" id="idComment"><?php echo $result['Comment']; ?></textarea><br>  
+    Link:<br>
+    <input type="text" name = "link" id="idLink" value="<?=$result['Link']; ?>"> <br><br>
+    <input type="submit" name="submit" id="commentBtn">
+  </form> 
 </body>
 </html>
